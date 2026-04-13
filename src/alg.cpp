@@ -71,6 +71,60 @@ std::string infx2pstfx(const std::string& inf) {
 
 
 int eval(const std::string& pref) {
-  // добавьте код
-  return 0;
+    TStack<int, 100> stack;
+    std::istringstream iss(pref);
+    std::string tok;
+    while (iss >> tok) {
+        if (std::isdigit(tok[0])) {
+            int cnt = std::stoi(tok);
+            stack.push(cnt);
+        } else if (tok.length() == 1 &&
+                   (tok[0] == '+' || tok[0] == '-' ||
+                    tok[0] == '*' || tok[0] == '/')) {
+            if (stack.isEmpty()) {
+                throw std::runtime_error("Err");
+            }
+
+            int operand2 = stack.top();
+            stack.pop();
+
+            if (stack.isEmpty()) {
+                throw std::runtime_error("Err");
+            }
+
+            int operand1 = stack.top();
+            stack.pop();
+            int result = 0;
+
+            switch (tok[0]) {
+                case '+': result = operand1 + operand2; break;
+                case '-': result = operand1 - operand2; break;
+                case '*': result = operand1 * operand2; break;
+                case '/':
+                    if (operand2 == 0) {
+                        throw std::runtime_error("Err");
+                    }
+                    result = operand1 / operand2;
+                    break;
+                default:
+                    throw std::runtime_error("Err");
+            }
+            stack.push(result);
+        } else {
+            throw std::runtime_error("Err");
+        }
+    }
+
+    if (stack.isEmpty()) {
+        throw std::runtime_error("Empty");
+    }
+
+    int res = stack.top();
+    stack.pop();
+
+    if (!stack.isEmpty()) {
+        throw std::runtime_error("erroneously");
+    }
+
+    return res;
 }
