@@ -22,8 +22,7 @@ std::string infx2pstfx(const std::string& inf) {
     if (symb == ' ') {
         continue;
     }
-
- if (std::isdigit(symb)) {
+if (std::isdigit(symb)) {
         while (j < inf.length() && std::isdigit(inf[j])) {
             outS.push_back(inf[j]);
             j++;
